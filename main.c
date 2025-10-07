@@ -27,15 +27,23 @@ void GROUP1_IRQHandler(void);
 void TIMG6_IRQHandler(void);
 void TIMG12_IRQHandler(void);
 
+void static delay(void) {
+    volatile long timer = 2000000;
+    while (timer > 0) {
+        timer--;
+    }
+}
 int main(void){
 	S1_init_interrupt();
 	S2_init_interrupt();
 	LED1_init();
 	LED2_init();
 	UART0_init();
-	TIMG6_init(2, 255);
+	__disable_irq();
+	TIMG6_init(2, 256);
+	__enable_irq();
 	TIMG12_init(1000);
-	while(1){}
+	while(1){__WFI();}
 }
 
 void TIMG6_IRQHandler(void){
@@ -46,14 +54,22 @@ void TIMG6_IRQHandler(void){
 			LED1_set(0);
 			LED1counter = 0;
 		}
-    TIMG6-> CPU_INT.ICLR = GPTIMER_GEN_EVENT1_ICLR_Z_CLR; 
+    TIMG6-> CPU_INT.ICLR = GPTIMER_CPU_INT_ICLR_Z_CLR; 
 }
 
 void TIMG12_IRQHandler(void){
 		if(sw2_state){
 			g12counter++; 
+					LED2_set('r');
+					LED2_set('g');
+					LED2_set('b');
+					LED2_set('c');
+					LED2_set('m');
+					LED2_set('y');
+					LED2_set('w');
+					LED2_set('o');
 		}
-    TIMG12-> CPU_INT.ICLR = GPTIMER_GEN_EVENT1_ICLR_Z_CLR; 
+    TIMG12-> CPU_INT.ICLR = GPTIMER_CPU_INT_ICLR_Z_CLR; 
 }
 
 void GROUP1_IRQHandler(void){
@@ -75,20 +91,14 @@ void GROUP1_IRQHandler(void){
 				if(!sw2_state){
 					g12counter = 0;
 					TIMG12->COUNTERREGS.CTRCTL |= GPTIMER_CTRCTL_EN_ENABLED;
-					LED2_set('r');
-					LED2_set('g');
-					LED2_set('b');
-					LED2_set('c');
-					LED2_set('m');
-					LED2_set('y');
-					LED2_set('w');
-					LED2_set('o');
+
           sw2_state = true;
 				}else{
 					TIMG12->COUNTERREGS.CTRCTL &= ~GPTIMER_CTRCTL_EN_MASK;
-					UART0_put((uint8_t *)"Elapsed Time: ");
-					UART0_put((uint8_t *)g12counter);
-					UART0_put((uint8_t *)"\r\n");
+					char buffer[50];
+          sprintf(buffer, "Elapsed Time: %u ms\r\n", g12counter);
+					UART0_put((uint8_t *)buffer);
+					sw2_state = false;
 				}
 				GPIOB->CPU_INT.ICLR = GPIO_CPU_INT_ICLR_DIO21_CLR;
 				
