@@ -29,8 +29,8 @@ void Camera_init(void){
 	
 	//GPIOB->DOUTSET31_0 |= GPIO_DOESET31_0_DIO22_SET; to enable
 	ADC0_init();
-	TIMG0_init(100000, 0);
-	TIMG6_init((uint32_t)7.5, 255);
+	TIMG0_init(100000, 1);
+	TIMG6_init((uint32_t)7.5, 256);
 }
 
 
@@ -86,3 +86,4 @@ void TIMG0_IRQHandler(void){
 	// clear interrupt
 	TIMG0->CPU_INT.ICLR = GPTIMER_GEN_EVENT1_ICLR_Z_CLR;
 }
+
