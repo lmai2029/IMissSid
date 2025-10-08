@@ -99,3 +99,14 @@ void UART0_printHex(uint32_t num) {
     UART0_put((uint8_t *)hexString);
 		UART0_put((uint8_t *)"\n");
 }
+
+void UART0_printBin(uint16_t num)
+{
+    for (int i = 15; i >= 0; i--) {
+        if (num & (1 << i)) {
+            UART0_put((uint8_t *)'1');
+        } else {
+            UART0_put((uint8_t *)'0');
+        }
+    }
+}
