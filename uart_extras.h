@@ -17,4 +17,5 @@ void UART0_printDec(int num);
 void UART0_printFloat(double num);
 void UART0_printHex(uint32_t num);
 void UART0_printUDec(uint32_t num);
+void UART0_printBin(uint16_t num);
 #endif // _UART_EXTRAS_H_
