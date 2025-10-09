@@ -257,10 +257,11 @@ void TIMA1_PWM_DutyCycle(uint8_t pin, double percentDutyCycle){
 	uint32_t dutyValue = (uint32_t)(PWMA1timclk * percentDutyCycle);
 	switch(pin){
 			case 0:
-				TIMA0->COUNTERREGS.CC_01[0] = dutyValue;
+				TIMA1->COUNTERREGS.CC_01[0] = dutyValue;
 				break;
 		}
 }
+
 
 
 
