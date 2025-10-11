@@ -21,6 +21,8 @@
 #include <stdio.h>
 
 static uint32_t adc_value;
+//static uint32_t adc_value_F;
+//static double adc_value_temp;
 void TIMG6_IRQHandler(void);
 
 
@@ -33,9 +35,15 @@ int main(void){
 
 void TIMG6_IRQHandler(void){
 	adc_value = ADC0_getVal();
+	//adc_value_temp = (adc_value*1.8);
+	//adc_value_F = ((uint32_t)adc_value_temp) + 32; 
 	UART0_put((uint8_t *)"Beginning conversion\r\n");
 	UART0_put((uint8_t *)"Decimal value: ");
 	UART0_printUDec(adc_value);
+	//UART0_put((uint8_t *)" Celcius\r\n");
+	//UART0_put((uint8_t *)"Decimal value: ");
+	//UART0_printUDec(adc_value_F);
+	//UART0_put((uint8_t *)" Fahrenhiet\r\n");
 	UART0_put((uint8_t *)"Hexdecimal value: 0x");
 	UART0_printHex(adc_value);
 	UART0_put((uint8_t *)"\r\n");
